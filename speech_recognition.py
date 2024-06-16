@@ -42,7 +42,13 @@ def upload_video(video_path:str, interval:int, language:str) -> str:
         tmp += result[index] 
     return tmp
 
-text =  upload_video(video_path = 'template.mp4',interval = 60000, language = 'ru-RU')
-file = open('template.txt', 'w')
-file.write(text)
-file.close()
+current_dir = os.getcwd()
+for filename in os.listdir(current_dir):
+    if filename.endswith('.mp4') and filename.startswith('recognition!') == False:
+        print(f'[{datetime.now()}] {filename} start recognition')
+        text =  from_video(filename, 60000)
+        file = open(filename.replace('.mp4', '.txt'), 'w')
+        file.write(text)
+        file.close()
+        os.rename(filename,f'recognition!{filename}')
+        print(f'[{datetime.now()}] {filename} finish recognition')
